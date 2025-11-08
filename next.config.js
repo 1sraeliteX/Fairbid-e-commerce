@@ -23,7 +23,6 @@ const nextConfig = {
   cssModules: true,
   // Enable CSS source maps in development
   productionBrowserSourceMaps: true,
-  },
   // Enable Turbopack in development
   experimental: {
     turbo: {}
