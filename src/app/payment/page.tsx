@@ -16,9 +16,11 @@ export default function PaymentPage() {
 
   // Fetch the amount from URL params
   useEffect(() => {
-    const amountParam = searchParams.get('amount');
-    if (amountParam) {
-      setAmount(parseFloat(amountParam));
+    if (searchParams) {
+      const amountParam = searchParams.get('amount');
+      if (amountParam) {
+        setAmount(parseFloat(amountParam));
+      }
     }
   }, [searchParams]);
 

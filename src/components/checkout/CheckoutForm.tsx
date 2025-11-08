@@ -459,9 +459,9 @@ export default function CheckoutForm({ activeStep, setActiveStep, onOrderComplet
     e.preventDefault();
     
     // Validate current step
-    const currentErrors = validateStep(activeStep);
-    if (Object.keys(currentErrors).length > 0) {
-      setErrors(currentErrors);
+    const isValid = validateStep(activeStep);
+    if (!isValid) {
+      // Errors are already set in the validateStep function
       return;
     }
 

@@ -7,13 +7,10 @@ import Link from 'next/link';
 import { HomeIcon, ShoppingBagIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline';
 import { useCart } from '@/hooks/use-cart';
 import CartPanel from './shop/CartPanel';
-import { useAuth } from '@/context/AuthContext';
-
 const navItems = [
   { name: 'Home', icon: HomeIcon, href: '/' },
   { name: 'Shop', icon: ShoppingBagIcon, href: '/shop' },
   { name: 'Cart', icon: ShoppingCartIcon, href: '/cart' },
-  { name: 'Profile', icon: UserIcon, href: '/profile' },
 ];
 
 export default function DynamicIslandNav() {
@@ -21,7 +18,6 @@ export default function DynamicIslandNav() {
   const router = useRouter();
   const [activeItem, setActiveItem] = useState('Home');
   const { itemCount, isCartOpen, openCart, closeCart } = useCart();
-  const { user } = useAuth();
 
   // Prevent body scroll when cart is open
   useEffect(() => {
@@ -49,12 +45,6 @@ export default function DynamicIslandNav() {
 
   const handleItemClick = (name: string, href: string) => {
     setActiveItem(name);
-    
-    // Redirect to login if user tries to access profile without being logged in
-    if (name === 'Profile' && !user) {
-      router.push('/login');
-      return;
-    }
     
     // Handle cart click
     if (name === 'Cart') {

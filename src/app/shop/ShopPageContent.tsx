@@ -1,13 +1,23 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { products, categories, sortOptions, type Product } from '@/data/products';
-import { FiFilter, FiX, FiChevronDown, FiPlus, FiMinus, FiShoppingCart } from 'react-icons/fi';
+import { FiFilter, FiX, FiChevronDown, FiPlus, FiMinus, FiShoppingCart, FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import Link from 'next/link';
 import Image from 'next/image';
-import ProductCard from '@/components/shop/ProductCard';
+import dynamic from 'next/dynamic';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+
+// Dynamically import the ProductCard component with no SSR
+const ProductCard = dynamic(() => import('@/components/shop/ProductCard'), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-gray-200 rounded-lg h-80 w-full" />
+  ),
+});
 
 // Modern Price Range Slider Component with Multi-Thumb Slider
 const PriceRangeSlider = ({
@@ -244,7 +254,7 @@ const FilterSidebar = ({
   selectedCategories: string[];
   onCategoryChange: (category: string) => void;
   priceRange: [number, number];
-  onPriceRangeChange: (min: number, max: number) => void;
+  onPriceRangeChange: (range: [number, number]) => void;
   minPrice: number;
   maxPrice: number;
 }) => {
@@ -299,7 +309,7 @@ const FilterSidebar = ({
               min={minPrice}
               max={maxPrice}
               value={priceRange}
-              onChange={([min, max]) => onPriceRangeChange(min, max)}
+              onChange={onPriceRangeChange}
               step={1}
             />
           </div>
@@ -319,8 +329,8 @@ const FilterSidebar = ({
   );
 };
 
-// Main Shop Page Component
-export default function ShopPageContent() {
+// Shop Content Component (wrapped in Suspense and ErrorBoundary)
+function ShopContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { itemCount } = useCart();
@@ -407,7 +417,7 @@ export default function ShopPageContent() {
   };
   
   // Handle price range change
-  const handlePriceRangeChange = (min: number, max: number) => {
+  const handlePriceRangeChange = ([min, max]: [number, number]) => {
     setPriceRange([Math.min(min, priceRange[1]), Math.max(max, priceRange[0])]);
   };
   
@@ -442,6 +452,8 @@ export default function ShopPageContent() {
   
   // Read initial filters from URL
   useEffect(() => {
+    if (!searchParams) return;
+    
     const params = new URLSearchParams(searchParams.toString());
     
     // Set categories
@@ -468,6 +480,29 @@ export default function ShopPageContent() {
       setPriceRange([minPrice, maxPrice]);
     }
   }, [searchParams, minPrice, maxPrice]);
+  
+  // Simulate loading state
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Simulate data fetching
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Simulate network delay
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <LoadingSpinner size="lg" />
+          <p className="mt-4 text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="bg-gray-50 min-h-screen">
