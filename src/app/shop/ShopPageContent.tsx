@@ -714,3 +714,5 @@ function ShopContent() {
     </div>
   );
 }
+
+export default ShopContent;

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import ShopPageSkeleton from '@/components/shop/ShopPageSkeleton';
 
-const ShopPageContent = dynamic(() => import('./ShopPageContent'), {
+const ShopPageContent = dynamic(() => import('./ShopPageContent').then(mod => mod.default), {
   ssr: false,
   loading: () => <ShopPageSkeleton />
 });

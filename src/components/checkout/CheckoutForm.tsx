@@ -455,6 +455,12 @@ export default function CheckoutForm({ activeStep, setActiveStep, onOrderComplet
     }
   };
 
+  const handleBack = () => {
+    if (activeStep > 1) {
+      setActiveStep(activeStep - 1);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -500,7 +506,7 @@ export default function CheckoutForm({ activeStep, setActiveStep, onOrderComplet
     }
 
     // For other steps, go to next step
-    setActiveStep(prev => prev + 1);
+    setActiveStep(activeStep + 1);
   };
 
   const formatCardNumber = (value: string) => {

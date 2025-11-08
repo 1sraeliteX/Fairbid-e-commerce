@@ -34,6 +34,8 @@ export default function DynamicIslandNav() {
 
   // Update active item based on current path
   useEffect(() => {
+    if (!pathname) return;
+    
     const currentItem = navItems.find(item => 
       pathname === item.href || 
       (item.href !== '/' && pathname.startsWith(item.href))

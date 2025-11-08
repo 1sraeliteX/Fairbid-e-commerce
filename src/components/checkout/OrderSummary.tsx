@@ -11,7 +11,7 @@ export default function OrderSummary() {
   // Calculate total price from cart items
   const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
-  const shipping = 0; // Free shipping
+  const shipping: number = 0; // Free shipping
   const taxRate = 0.1; // 10% tax
   const tax = totalPrice * taxRate;
   const orderTotal = totalPrice + shipping + tax;

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FiCreditCard, FiGlobe, FiDollarSign, FiLock, FiArrowLeft, FiCopy, FiChevronDown } from 'react-icons/fi';
 import { FaBitcoin } from 'react-icons/fa';
 import Link from 'next/link';
 
-export default function PaymentPage() {
+function PaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
@@ -354,5 +354,17 @@ export default function PaymentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    }>
+      <PaymentContent />
+    </Suspense>
   );
 }
