@@ -19,6 +19,11 @@ const nextConfig = {
     
     return config;
   },
+  // Enable CSS modules
+  cssModules: true,
+  // Enable CSS source maps in development
+  productionBrowserSourceMaps: true,
+  },
   // Enable Turbopack in development
   experimental: {
     turbo: {}
